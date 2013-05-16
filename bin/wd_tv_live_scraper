@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @author Manuele Menozzi <mmenozzi@webgriffe.com> 
+ */
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$console = new Application('Western Digital TV Live Scraper', '0.1');
+$console->add(new \Mmenozzi\WdTvLiveScraper\Command\TvDbCommand());
+$console->run();
