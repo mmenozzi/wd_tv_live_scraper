@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "symfony/console": "v2.1.10",
+        "symfony/console": "v2.2.1",
         "symfony/finder": "v2.2.1",
         "moinax/tvdb": "dev-master"
     },
