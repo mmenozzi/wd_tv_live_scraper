@@ -20,7 +20,8 @@
     "require": {
         "symfony/console": "v2.2.1",
         "symfony/finder": "v2.2.1",
-        "moinax/tvdb": "dev-master"
+        "moinax/tvdb": "dev-master",
+        "jms/serializer": "0.12.0"
     },
     "autoload": {
         "psr-0": { "": "src/" }

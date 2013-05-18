@@ -7,6 +7,9 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use \Doctrine\Common\Annotations\AnnotationRegistry;
+
+AnnotationRegistry::registerAutoloadNamespace('JMS\Serializer\Annotation', __DIR__ . "/../vendor/jms/serializer/src");
 
 $console = new Application('Western Digital TV Live Scraper', '0.1');
 $console->add(new \Mmenozzi\WdTvLiveScraper\Command\TvDbCommand());
