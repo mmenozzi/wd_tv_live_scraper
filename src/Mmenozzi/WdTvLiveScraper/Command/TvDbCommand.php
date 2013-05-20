@@ -235,21 +235,24 @@ class TvDbCommand extends Command
      */
     private function getSeasonAndEpisodeNumbers($file)
     {
-        $matches = array();
-        $regExp = '/(\d+)x(\d+)|s(\d)+e(\d)+/i';
-        preg_match($regExp, $file->getBasename(), $matches);
-        if (count($matches) > 3) {
-            throw new NotValidSerieEpisodeFilenameException(
-                sprintf(
-                    'The file %s has an invalid file name. File name should match the following pattern: %s',
-                    $file->getRealPath(),
-                    $regExp
-                )
-            );
+        $regExps = array('/(\d+)x(\d+)/i', '/s(\d+)e(\d+)/i');
+        foreach ($regExps as $regExp) {
+            $matches = array();
+            preg_match($regExp, $file->getBasename(), $matches);
+            if (count($matches) === 3 && is_numeric($matches[1]) && is_numeric($matches[2])) {
+                $season = (int)$matches[1];
+                $episode = (int)$matches[2];
+                return array($season, $episode);
+            }
         }
-        $season = (int)$matches[1];
-        $episode = (int)$matches[2];
-        return array($season, $episode);
+
+        throw new NotValidSerieEpisodeFilenameException(
+            sprintf(
+                'The file %s has an invalid file name. File name should match one of the following patterns: %s',
+                $file->getRealPath(),
+                implode(', ', $regExps)
+            )
+        );
     }
 
     private function getMetathumbFilePath($file)
