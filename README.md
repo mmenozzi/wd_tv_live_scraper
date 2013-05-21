@@ -36,4 +36,4 @@ For more infor type:
 	
 	wd_tv_live_scraper tvdb --help
 	
-You need to have all your episodes of a given TV Show store in a directory (`directory` argument). When the command starts it asks for searching a TV Show, enter the title (or part of it) and select from the list. After that the command starts retrieving meta-data for video files found in `directory` that didn't have related meta-data `.xml` file. Use `language` option to get meta-data in the given language.
+You need to have all your episodes of a given TV Show stored in a `directory`. When the command starts it asks for searching a TV Show, enter the title (or part of it) and select from the list. After that the command starts retrieving meta-data for video files found in `directory` that didn't have related meta-data `.xml` file. Use `language` option to get meta-data in the given language.
