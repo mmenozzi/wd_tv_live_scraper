@@ -10,7 +10,7 @@ For any suggestion, please, let me know through GitHub's issues.
 Requirements
 ------------
 
-* Unix based operating system
+* Unix based shell (BSD, GNU or Cygwin)
 * PHP (http://php.net/)
 * cURL
 
