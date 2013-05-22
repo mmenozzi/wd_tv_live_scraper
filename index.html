@@ -28,43 +28,39 @@
 
     <div class="container">
       <section id="main_content">
-        <h1>WD TV Live Scraper</h1>
+	<h1>WD TV Live Scraper</h1>
+<p>Command-line application that helps you to retrieve TV Shows&#39;s meta-data informations for <a href="http://store.westerndigital.com/store/wdus/en_US/compare/ThemeID.21986300/parentCategoryID.13092400/categoryID.13742300">WD TV Live</a> media player.
 
-<p>Command-line application that helps you to retrieve TV Shows's meta-data informations for <a href="http://store.westerndigital.com/store/wdus/en_US/compare/ThemeID.21986300/parentCategoryID.13092400/categoryID.13742300">WD TV Live</a> media player.</p>
+</p>
+<p>TV Shows&#39;s meta-data comes from <a href="http://thetvdb.com/"><strong>thetvdb.com</strong></a> online database.
 
-<p>TV Shows's meta-data comes from <a href="http://thetvdb.com/"><strong>thetvdb.com</strong></a> online database.</p>
+</p>
+<p>For any suggestion, please, let me know through GitHub&#39;s issues.
 
-<p>For any suggestion, please, let me know through GitHub's issues.</p>
-
+</p>
 <h2>Requirements</h2>
-
 <ul>
 <li>Unix based shell (BSD, GNU or Cygwin)</li>
 <li>PHP (<a href="http://php.net/">http://php.net/</a>)</li>
 <li>cURL</li>
-</ul><h2>Installation</h2>
-
+</ul>
+<h2>Installation</h2>
 <pre><code>cd /some/dir/
 git clone git@github.com:mmenozzi/wd_tv_live_scraper.git .
 composer install
-ln -s /some/dir/bin/wd_tv_live_scraper /usr/local/bin/wd_tv_live_scraper
-</code></pre>
-
+ln -s /some/dir/bin/wd_tv_live_scraper /usr/local/bin/wd_tv_live_scraper</code></pre>
 <h2>Usage</h2>
-
 <h3>TV Shows</h3>
+<p>Command syntax:
 
-<p>Command syntax:</p>
+</p>
+<pre><code>wd_tv_live_scraper tvdb [--language=&quot;...&quot;] [--dry-run] directory</code></pre>
+<p>For more informations type:
 
-<pre><code>wd_tv_live_scraper tvdb [--language="..."] [--dry-run] directory
-</code></pre>
+</p>
+<pre><code>wd_tv_live_scraper tvdb --help</code></pre>
+<p>You need to have all your episodes of a given TV Show stored in a <code>directory</code>. When the command starts it asks for searching a TV Show, enter the title (or part of it) and select from the list. After that the command starts retrieving meta-data for video files found in <code>directory</code> that didn&#39;t have related meta-data <code>.xml</code> file. Use <code>language</code> option to get meta-data in the given language.</p>
 
-<p>For more infor type:</p>
-
-<pre><code>wd_tv_live_scraper tvdb --help
-</code></pre>
-
-<p>You need to have all your episodes of a given TV Show stored in a <code>directory</code>. When the command starts it asks for searching a TV Show, enter the title (or part of it) and select from the list. After that the command starts retrieving meta-data for video files found in <code>directory</code> that didn't have related meta-data <code>.xml</code> file. Use <code>language</code> option to get meta-data in the given language.</p>
       </section>
     </div>
 
