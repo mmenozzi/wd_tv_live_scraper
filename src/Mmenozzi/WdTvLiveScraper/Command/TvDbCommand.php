@@ -76,39 +76,24 @@ class TvDbCommand extends Command
         /** @var $dialog DialogHelper */
 
         $serie = $this->askForSerie($output, $dialog, $language);
+        $banners = $this->tvDbClient->getBanners($serie->id);
 
         $finder = $this->findVideoFilesWithoutMetadata($directory);
         foreach ($finder as $file) {
             /** @var $file SplFileInfo */
             list($seasonNumber, $episodeNumber) = $this->getSeasonAndEpisodeNumbers($file);
-            $output->writeln(
-                sprintf(
-                    'Retrieving meta-data for <info>%s</info> - [Season: <info>%s</info>. Episode: <info>%s</info>]...',
-                    $file->getBasename(),
-                    $seasonNumber,
-                    $episodeNumber
-                )
-            );
+            $this->printCurrentFileAndEpisode($output, $file, $seasonNumber, $episodeNumber);
+
+            $episode = $this->tvDbClient->getEpisode($serie->id, $seasonNumber, $episodeNumber, $language);
+            $wdTvLiveEpisode = new TvShowEpisode($episode, $serie, $banners);
+
+            $wdTvLiveEpisodeXml = $this->serializeEpisodeInXml($wdTvLiveEpisode);
 
             $metadataFilePath = $this->getMetadataFilePath($file);
-            $episode = $this->tvDbClient->getEpisode($serie->id, $seasonNumber, $episodeNumber, $language);
-            $banners = $this->tvDbClient->getBanners($serie->id);
-            $wdTvLiveEpisode = new TvShowEpisode($episode, $serie, $banners);
-            $serializer = SerializerBuilder::create()
-                ->configureHandlers(
-                    function(HandlerRegistry $registry) {
-                        $registry->registerSubscribingHandler(new NoCdataXmlHandler());
-                    }
-                )
-                ->build();
+            $metathumbFilePath = $this->getMetathumbFilePath($file);
 
-            $wdTvLiveEpisodeXml = $serializer->serialize($wdTvLiveEpisode, 'xml');
             if (!$dryRun) {
                 file_put_contents($metadataFilePath, $wdTvLiveEpisodeXml);
-            }
-
-            $metathumbFilePath = $this->getMetathumbFilePath($file);
-            if (!$dryRun) {
                 file_put_contents($metathumbFilePath, file_get_contents($this->getSeriePosterUrl($serie)));
             }
         }
@@ -233,7 +218,7 @@ class TvDbCommand extends Command
      * @return array
      * @throws \Mmenozzi\WdTvLiveScraper\Exception\NotValidSerieEpisodeFilenameException
      */
-    private function getSeasonAndEpisodeNumbers($file)
+    private function getSeasonAndEpisodeNumbers(SplFileInfo $file)
     {
         $regExps = array('/(\d+)x(\d+)/i', '/s(\d+)e(\d+)/i');
         foreach ($regExps as $regExp) {
@@ -255,7 +240,7 @@ class TvDbCommand extends Command
         );
     }
 
-    private function getMetathumbFilePath($file)
+    private function getMetathumbFilePath(SplFileInfo $file)
     {
         $filenameWithoutExtension = $this->getFilenameWithoutExtension($file);
         $filePath = $file->getPath();
@@ -271,5 +256,49 @@ class TvDbCommand extends Command
     {
         $filenameWithoutExtension = $file->getBasename('.' . $file->getExtension());
         return $filenameWithoutExtension;
+    }
+
+    /**
+     * @return \JMS\Serializer\Serializer
+     */
+    private function initSerializer()
+    {
+        $serializer = SerializerBuilder::create()
+            ->configureHandlers(
+                function (HandlerRegistry $registry) {
+                    $registry->registerSubscribingHandler(new NoCdataXmlHandler());
+                }
+            )
+            ->build();
+        return $serializer;
+    }
+
+    /**
+     * @param $wdTvLiveEpisode
+     * @return mixed
+     */
+    private function serializeEpisodeInXml($wdTvLiveEpisode)
+    {
+        $serializer = $this->initSerializer();
+        $wdTvLiveEpisodeXml = $serializer->serialize($wdTvLiveEpisode, 'xml');
+        return $wdTvLiveEpisodeXml;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param $file
+     * @param $seasonNumber
+     * @param $episodeNumber
+     */
+    private function printCurrentFileAndEpisode(OutputInterface $output, SplFileInfo $file, $seasonNumber, $episodeNumber)
+    {
+        $output->writeln(
+            sprintf(
+                'Retrieving meta-data for <info>%s</info> - [Season: <info>%s</info>. Episode: <info>%s</info>]...',
+                $file->getBasename(),
+                $seasonNumber,
+                $episodeNumber
+            )
+        );
     }
 }
