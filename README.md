@@ -32,7 +32,7 @@ Command syntax:
 
 	wd_tv_live_scraper tvdb [--language="..."] [--dry-run] directory
 
-For more infor type:
+For more informations type:
 	
 	wd_tv_live_scraper tvdb --help
 	
