@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "728e3d1453c32ca7f3d3c179f8537bb2",
+    "hash": "5960d5702e9f91ae30e76c1388692baf",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -283,6 +283,39 @@
             "time": "2013-03-28 16:41:24"
         },
         {
+            "name": "mediadevils/tmdb-library",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MediaDevils/tmdb-library.git",
+                "reference": "98ab7e103db57e3f44d893e548b902456c8f70b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MediaDevils/tmdb-library/zipball/98ab7e103db57e3f44d893e548b902456c8f70b9",
+                "reference": "98ab7e103db57e3f44d893e548b902456c8f70b9",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*@stable"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "TMDB": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Justin Martin",
+                    "email": "frozenfire@thefrozenfire.com"
+                }
+            ],
+            "description": "PHP wrapper classes for TMDB (TheMovieDatabase) API v3.",
+            "time": "2013-05-13 16:38:18"
+        },
+        {
             "name": "moinax/tvdb",
             "version": "dev-master",
             "source": {
@@ -500,7 +533,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "moinax/tvdb": 20
+        "moinax/tvdb": 20,
+        "mediadevils/tmdb-library": 20
     },
     "platform": [
 
