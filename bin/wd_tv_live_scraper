@@ -13,4 +13,5 @@ AnnotationRegistry::registerAutoloadNamespace('JMS\Serializer\Annotation', __DIR
 
 $console = new Application('Western Digital TV Live Scraper', '0.1');
 $console->add(new \Mmenozzi\WdTvLiveScraper\Command\TvDbCommand());
+$console->add(new \Mmenozzi\WdTvLiveScraper\Command\TmDbCommand());
 $console->run();
