@@ -11,6 +11,7 @@ use JMS\Serializer\SerializerBuilder;
 use Mmenozzi\WdTvLiveScraper\Exception\NotValidSerieEpisodeFilenameException;
 use Mmenozzi\WdTvLiveScraper\Model\WdTvLive\TvShowEpisode;
 use Mmenozzi\WdTvLiveScraper\Serializer\NoCdataXmlHandler;
+use Mmenozzi\WdTvLiveScraper\Service\VideoFinder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,6 +36,11 @@ class TvDbCommand extends Command
      */
     private $tvDbClient;
 
+    /**
+     * @var $videoFinder VideoFinder
+     */
+    private $videoFinder;
+
     protected function configure()
     {
         $this
@@ -55,6 +61,12 @@ class TvDbCommand extends Command
                 )
             )
             ->addOption(
+                'force',
+                null,
+                InputOption::VALUE_NONE,
+                'If set, meta-data retrivial is forced also for files that already have meta-data.'
+            )
+            ->addOption(
                 'dry-run',
                 null,
                 InputOption::VALUE_NONE,
@@ -71,6 +83,7 @@ class TvDbCommand extends Command
         $language = $language ? $language : self::DEFAULT_LANGUAGE;
 
         $this->tvDbClient = new Client(self::TVDB_BASE_URL, self::TVDB_API_KEY);
+        $this->videoFinder = new VideoFinder();
 
         $dialog = $this->getHelperSet()->get('dialog');
         /** @var $dialog DialogHelper */
@@ -78,19 +91,20 @@ class TvDbCommand extends Command
         $serie = $this->askForSerie($output, $dialog, $language);
         $banners = $this->tvDbClient->getBanners($serie->id);
 
-        $finder = $this->findVideoFilesWithoutMetadata($directory);
+        $excludeFilesWithMetadata = !$input->getOption('force');
+        $finder = $this->videoFinder->findVideoFiles($directory, $excludeFilesWithMetadata);
         foreach ($finder as $file) {
             /** @var $file SplFileInfo */
             list($seasonNumber, $episodeNumber) = $this->getSeasonAndEpisodeNumbers($file);
-            $this->printCurrentFileAndEpisode($output, $file, $seasonNumber, $episodeNumber);
+            $this->printCurrentFileAndEpisode($output, $file, $seasonNumber, $episodeNumber, $dryRun);
 
             $episode = $this->tvDbClient->getEpisode($serie->id, $seasonNumber, $episodeNumber, $language);
             $wdTvLiveEpisode = new TvShowEpisode($episode, $serie, $banners);
 
             $wdTvLiveEpisodeXml = $this->serializeEpisodeInXml($wdTvLiveEpisode);
 
-            $metadataFilePath = $this->getMetadataFilePath($file);
-            $metathumbFilePath = $this->getMetathumbFilePath($file);
+            $metadataFilePath = $this->videoFinder->getMetadataFilePath($file);
+            $metathumbFilePath = $this->videoFinder->getMetathumbFilePath($file);
 
             if (!$dryRun) {
                 file_put_contents($metadataFilePath, $wdTvLiveEpisodeXml);
@@ -148,72 +162,6 @@ class TvDbCommand extends Command
     }
 
     /**
-     * @param $directory
-     * @return Finder
-     */
-    private function findVideoFilesInDirectory($directory)
-    {
-        $finder = Finder::create();
-        $finder->in($directory)->files();
-        foreach (self::getVideoFilePatterns() as $pattern) {
-            $finder->name($pattern);
-        }
-        $finder->sortByName();
-        return $finder;
-    }
-
-    private static function getVideoFilePatterns()
-    {
-        return array(
-            '*.avi',
-            '*.flv',
-            '*.mov',
-            '*.mp4',
-            '*.mpg',
-            '*.rm',
-            '*.wmv',
-            '*.vob',
-            '*.mkv',
-        );
-    }
-
-    /**
-     * @param Finder $finder
-     * @return Finder
-     */
-    private function excludeFilesWithMetadata(Finder $finder)
-    {
-        $command = $this;
-        $finder->filter(
-            function (\SplFileInfo $file) use ($command) {
-                if (file_exists($command->getMetadataFilePath($file))) {
-                    return false;
-                }
-            }
-        );
-        return $finder;
-    }
-
-    /**
-     * @param \SplFileInfo $file
-     * @return string
-     */
-    function getMetadataFilePath(\SplFileInfo $file)
-    {
-        $filenameWithoutExtension = $this->getFilenameWithoutExtension($file);
-        $filePath = $file->getPath();
-        $metadataFilePathname = $filePath . DIRECTORY_SEPARATOR . $filenameWithoutExtension . '.xml';
-        return $metadataFilePathname;
-    }
-
-    private function findVideoFilesWithoutMetadata($directory)
-    {
-        $finder = $this->findVideoFilesInDirectory($directory);
-        $finder = $this->excludeFilesWithMetadata($finder);
-        return $finder;
-    }
-
-    /**
      * @param $file
      * @return array
      * @throws \Mmenozzi\WdTvLiveScraper\Exception\NotValidSerieEpisodeFilenameException
@@ -238,24 +186,6 @@ class TvDbCommand extends Command
                 implode(', ', $regExps)
             )
         );
-    }
-
-    private function getMetathumbFilePath(SplFileInfo $file)
-    {
-        $filenameWithoutExtension = $this->getFilenameWithoutExtension($file);
-        $filePath = $file->getPath();
-        $metathumbFilePathname = $filePath . DIRECTORY_SEPARATOR . $filenameWithoutExtension . '.metathumb';
-        return $metathumbFilePathname;
-    }
-
-    /**
-     * @param \SplFileInfo $file
-     * @return string
-     */
-    private function getFilenameWithoutExtension(\SplFileInfo $file)
-    {
-        $filenameWithoutExtension = $file->getBasename('.' . $file->getExtension());
-        return $filenameWithoutExtension;
     }
 
     /**
@@ -290,11 +220,17 @@ class TvDbCommand extends Command
      * @param $seasonNumber
      * @param $episodeNumber
      */
-    private function printCurrentFileAndEpisode(OutputInterface $output, SplFileInfo $file, $seasonNumber, $episodeNumber)
-    {
+    private function printCurrentFileAndEpisode(
+        OutputInterface $output,
+        SplFileInfo $file,
+        $seasonNumber,
+        $episodeNumber,
+        $dryRun
+    ) {
         $output->writeln(
             sprintf(
-                'Retrieving meta-data for <info>%s</info> - [Season: <info>%s</info>. Episode: <info>%s</info>]...',
+                '%sRetrieving meta-data for <info>%s</info> - [Season: <info>%s</info>. Episode: <info>%s</info>]...',
+                $dryRun ? '[Dry Run] - ' : '',
                 $file->getBasename(),
                 $seasonNumber,
                 $episodeNumber
