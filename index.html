@@ -29,13 +29,16 @@
     <div class="container">
       <section id="main_content">
 	<h1>WD TV Live Scraper</h1>
-<p>Command-line application that helps you to retrieve TV Shows&#39;s meta-data informations for <a href="http://store.westerndigital.com/store/wdus/en_US/compare/ThemeID.21986300/parentCategoryID.13092400/categoryID.13742300">WD TV Live</a> media player.
+<p>Command-line application that helps you to retrieve TV Shows and Movies meta-data informations for <a href="http://store.westerndigital.com/store/wdus/en_US/compare/ThemeID.21986300/parentCategoryID.13092400/categoryID.13742300">WD TV Live</a> media player.
 
 </p>
 <p>TV Shows&#39;s meta-data comes from <a href="http://thetvdb.com/"><strong>thetvdb.com</strong></a> online database.
 
 </p>
-<p>For any suggestion, please, let me know through GitHub&#39;s issues.
+<p>Movies&#39;s meta-data comes from <a href="http://www.themoviedb.org/"><strong>themoviedb.org</strong></a> online database.
+
+</p>
+<p>For any suggestion or bug, please, let me know through GitHub&#39;s issues.
 
 </p>
 <h2>Requirements</h2>
@@ -54,12 +57,26 @@ ln -s /some/dir/bin/wd_tv_live_scraper /usr/local/bin/wd_tv_live_scraper</code><
 <p>Command syntax:
 
 </p>
-<pre><code>wd_tv_live_scraper tvdb [--language=&quot;...&quot;] [--dry-run] directory</code></pre>
+<pre><code>wd_tv_live_scraper tvdb [--language=&quot;...&quot;] [--force] [--dry-run] directory</code></pre>
+<p>You need to have all your episodes of a given TV Show stored in a <code>directory</code>. When the command starts it asks for searching a TV Show, enter the title (or part of it) and select from the list. After that the command starts retrieving meta-data for video files found in <code>directory</code> that didn&#39;t have related meta-data <code>.xml</code> file. Use <code>language</code> option to get meta-data in the given language. If <code>force</code>option is set, meta-data retrivial is forced also for files that already have meta-data.
+
+</p>
 <p>For more informations type:
 
 </p>
 <pre><code>wd_tv_live_scraper tvdb --help</code></pre>
-<p>You need to have all your episodes of a given TV Show stored in a <code>directory</code>. When the command starts it asks for searching a TV Show, enter the title (or part of it) and select from the list. After that the command starts retrieving meta-data for video files found in <code>directory</code> that didn&#39;t have related meta-data <code>.xml</code> file. Use <code>language</code> option to get meta-data in the given language.</p>
+<h3>Movies</h3>
+<p>Command syntax:
+
+</p>
+<pre><code>wd_tv_live_scraper tmdb [--language=&quot;...&quot;] [--force] [--dry-run] directory</code></pre>
+<p><code>directory</code> should be the path where your movies are stored. For each video file, that didn&#39;t already have meta-data, in the <code>directory</code>, the command will ask you for a movie. Enter the title and select from list. Use <code>language</code> option to get data in the given language. If <code>force</code>option is set, meta-data retrivial is forced also for files that already have meta-data.
+
+</p>
+<p>For more informations type
+
+</p>
+<pre><code>wd_tv_live_scraper tmdb --help</code></pre>
 
       </section>
     </div>
