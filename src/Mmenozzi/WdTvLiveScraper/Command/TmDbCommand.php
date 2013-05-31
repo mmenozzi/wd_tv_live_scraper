@@ -101,15 +101,15 @@ class TmDbCommand extends Command
             }
             $output->writeln(
                 sprintf(
-                    '%sSaved meta-data and thumbnail (<info>%s</info>, <info>%s</info>).',
+                    '%sSaved meta-data and thumbnail for <info>%s</info>.',
                     $dryRun ? '[Dry Run] - ' : '',
-                    basename($metadataFilePath),
-                    basename($metathumbFilePath)
+                    $movie->title
                 )
             );
             $output->writeln('');
             $current++;
         }
+        $output->writeln('We\'re done!');
     }
 
     /**
