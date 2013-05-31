@@ -152,7 +152,7 @@ class TmDbCommand extends Command
         $choice = $dialog->select($output, 'Select:', $choices);
 
         if ($choice == count($results)) {
-            return $this->askForMovie($output, $file, $language);
+            return $this->askForMovie($output, $file, $language, $current, $total);
         }
 
         return $movies[$choice];
