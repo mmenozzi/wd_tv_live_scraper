@@ -141,7 +141,7 @@ class TmDbCommand extends Command
             $choices[] = sprintf(
                 "\t%s (%s) - %s\r\n\t%s\r\n",
                 $movie->title,
-                \DateTime::createFromFormat('Y-m-d', $movie->release_date)->format('Y'),
+                $movie->release_date,
                 $movie->poster('150'),
                 substr($movie->overview, 0, 60) . '...'
             );
