@@ -44,7 +44,7 @@ class VideoFinder
         $command = $this;
         $finder->filter(
             function (\SplFileInfo $file) use ($command) {
-                if (file_exists($this->getMetadataFilePath($file))) {
+                if (file_exists($command->getMetadataFilePath($file))) {
                     return false;
                 }
             }
