@@ -1,7 +1,8 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
     "hash": "5960d5702e9f91ae30e76c1388692baf",
     "packages": [
@@ -329,7 +330,7 @@
                     "TvDb\\": "src/"
                 }
             },
-            "time": "2013-02-14 07:04:01"
+            "time": "2014-04-08 06:52:02"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -525,21 +526,14 @@
             "time": "2013-04-01 07:51:50"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "moinax/tvdb": 20,
         "mediadevils/tmdb-library": 20
     },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "prefer-stable": false,
+    "platform": [],
+    "platform-dev": []
 }

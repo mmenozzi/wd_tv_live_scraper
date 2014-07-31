@@ -20,8 +20,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use TvDb\Client;
-use TvDb\Serie;
+use Moinax\TvDb\Client;
+use Moinax\TvDb\Serie;
 
 class TvDbCommand extends Command
 {
