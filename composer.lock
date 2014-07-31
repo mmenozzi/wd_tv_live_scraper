@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5960d5702e9f91ae30e76c1388692baf",
+    "hash": "8a229540c496fff62c61f518e3131929",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -321,15 +321,39 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git://github.com/Moinax/TvDb.git",
-                "reference": "master"
+                "url": "https://github.com/Moinax/TvDb.git",
+                "reference": "25529a26945f8cd153707f71a89ecbb652cf47e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Moinax/TvDb/zipball/25529a26945f8cd153707f71a89ecbb652cf47e9",
+                "reference": "25529a26945f8cd153707f71a89ecbb652cf47e9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "TvDb\\": "src/"
+                    "Moinax\\TvDb": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Moinax",
+                    "email": "moinax@gmail.com"
+                }
+            ],
+            "description": "PHPTVDB is a PHP library for accessing TV show information such as episodes, actors, showtimes and descriptions.",
+            "homepage": "http://moinax.github.io/TvDb/",
+            "keywords": [
+                "api"
+            ],
             "time": "2014-04-08 06:52:02"
         },
         {

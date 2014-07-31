@@ -1,22 +1,5 @@
 {
     "name": "mmenozzi/wd_tv_live_scraper",
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "moinax/tvdb",
-                "version": "dev-master",
-                "source": {
-                    "url": "git://github.com/Moinax/TvDb.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "autoload": {
-                    "psr-0": { "TvDb\\": "src/" }
-                }
-            }
-        }
-    ],
     "require": {
         "symfony/console": "v2.2.1",
         "symfony/finder": "v2.2.1",
