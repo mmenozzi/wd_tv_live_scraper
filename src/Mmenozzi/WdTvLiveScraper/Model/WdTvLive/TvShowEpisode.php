@@ -6,9 +6,9 @@
 namespace Mmenozzi\WdTvLiveScraper\Model\WdTvLive;
 
 use Mmenozzi\WdTvLiveScraper\Command\TvDbCommand;
-use TvDb\Banner;
-use TvDb\Episode;
-use TvDb\Serie;
+use Moinax\TvDb\Banner;
+use Moinax\TvDb\Episode;
+use Moinax\TvDb\Serie;
 use JMS\Serializer\Annotation\XmlRoot;
 use JMS\Serializer\Annotation\XmlList;
 
